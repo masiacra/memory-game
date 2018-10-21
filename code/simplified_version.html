@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>simplified version</title>
+	<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/A31F0C9C-E953-3C4F-BD4C-65A865D4E0CD/main.js" charset="UTF-8"></script><style>
+		.card {
+			width: 100px;
+			height: 150px;
+			border: 1px solid black;
+			float: left;
+			margin-right: 20px;
+			margin-bottom: 20px;
+		}
+		
+		.backSide {
+			background-color: black;
+		}
+		
+		.screen {
+			width: 720px;;
+		}
+		
+		* {
+			box-sizing: border-box;
+		}
+		
+
+	
+	</style>
+	
+	
+</head>
+<body>
+	<div class="screen">
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+	</div>
+	<div id="correct" data-count="0">Количество верных попыток: 0</div>
+	<div id="wrong" data-count="0">Количество неверных попыток: 0</div>
+	<script>
+		var colors = ['red', 'blue', 'green', 'red', 'blue', 'green',
+		'yellow', 'pink', 'teal', 'yellow', 'pink', 'teal',
+		'orange', 'gray', 'khaki', 'orange', 'gray', 'khaki']; 
+		
+		function randomCompare() {
+			return (-1 + Math.round(Math.random() * 2));
+		}
+		
+		colors.sort(randomCompare);
+		
+		var correct = document.getElementById('correct');
+		var wrong = document.getElementById('wrong');
+		
+		var screen = document.body.querySelector('div');
+
+		var cards = screen.querySelectorAll('div');
+		
+		for (var i = 0; i < cards.length; i++) {
+			cards[i].style.backgroundColor = colors[i];
+			cards[i].dataset.color = colors[i];
+		}
+		
+		setTimeout(function(){
+			for (var i = 0; i < cards.length; i++) {
+				cards[i].style.backgroundColor = 'black';
+				cards[i].onclick = changeCard;
+			}			
+		}, 5000);
+		
+		var firstSelectedCard= null;
+		
+		var pushed = 0;
+		
+		function changeCard(e) {
+			if (pushed >= 2) return;
+			pushed++;
+			var target = e.target;
+			var color = target.dataset.color;
+			target.style.backgroundColor = color;
+
+			if (!firstSelectedCard) {
+				firstSelectedCard = target;
+			} else {
+				
+				if (firstSelectedCard.style.backgroundColor == color) {
+					correct.dataset.count++;
+					correct.innerHTML = "Количество верно отгаданных пар: " +
+						correct.dataset.count;
+					var prev = firstSelectedCard;
+					firstSelectedCard = null;
+					setTimeout(function() {
+						prev.style.backgroundColor = 'white';
+						target.style.backgroundColor = 'white';
+						prev.onclick = null;
+						target.onclick = null;
+						prev = null;
+						pushed -= 2;
+					}, 800);
+				} else {
+					wrong.dataset.count++;
+					wrong.innerHTML = "Количество неверных попыток: " +
+						wrong.dataset.count;
+					var prev = firstSelectedCard;
+					firstSelectedCard = null;
+					setTimeout(function() {
+						prev.style.backgroundColor = 'black';
+						target.style.backgroundColor = 'black';
+						prev = null;
+						pushed -= 2;
+					}, 800);
+				}
+				
+			}
+		}
+
+		
+
+	
+	</script>
+</body>
+</html>

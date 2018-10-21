@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Memory game</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" 
+		rel="stylesheet">
+	<style>
+		
+		@-webkit-keyframes appear {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}
+		
+		@keyframes appear {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}	
+		
+		@-webkit-keyframes disappear {
+			from {
+				opacity: 1;
+			}
+			to {
+				opacity: 0;
+			}
+		}
+		
+		@keyframes disappear {
+			from {
+				opacity: 1;
+			}
+			to {
+				opacity: 0;
+			}
+		}		
+		
+		.cloth {
+			background-color: #1C7430;
+			font-family: "Open Sans", sans-serif;
+		}
+		
+		
+		/*показать с помощью анимации содержимое*/
+		.show {
+			-webkit-animation: appear 3s ease-in-out;
+			animation: appear 3s ease-in-out;
+		}
+		
+		/*скрыть с помощью анимации содержимое*/
+		.hide {
+			-webkit-animation: disappear 1s linear;
+			animation: disappear 1s linear;
+		}
+			
+		/*стили первой страницы*/
+		
+		.logo {
+			width: 503px;
+			height: 262px;
+			background-image: url(../images/StartGame.png);
+			background-repeat: no-repeat;
+			position: absolute;
+			left: 389px;
+			top: 94px;
+
+		}
+	
+		.title {
+			text-transform: uppercase;
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 28px;
+			color: rgba(255, 255, 255, .85);
+			letter-spacing: 0.2px;
+			position: absolute;
+			left: 531px;
+			top: 376px;
+		}
+		
+		.button {
+			background-color: rgba(255, 255, 255, .85);
+			color: #1C7430;
+			font-size: 16px;
+			font-weight: bold;
+			padding: 10px 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 3px 3px rgba(0,0,0, .35);
+			transition-property: All;
+			transition-duration: 1s;
+			cursor: pointer;
+			position: absolute;
+		}
+		
+		.button:hover {
+			box-shadow: 0 0 5px 5px rgba(0,0,0, .35);
+			-webkit-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			transform: scale(1.1);
+		}
+		
+		
+		.btnPosition1 {			
+			left: 569px;
+			top: 448px;
+			z-index: 10;
+		}
+		
+		/*стили второй страницы*/
+		
+		.card {
+			width: 102px;
+			height: 141.72px;
+			background-size: cover;
+			float: left;
+			margin-right: 20px;
+			margin-bottom: 20px;
+		}
+		
+		.backSide {
+			background-image: url(../Cards/backSide.png);
+		}
+		
+		.table {
+			width: 732px;
+			position: absolute;
+			top: 93px;
+			left: 290px;		
+		}
+		
+		.notes {
+			font-size: 14px;
+			color: rgba(255, 255, 255, .8);
+		}
+		
+		.again{
+			position: absolute;
+			left: 290px;
+			top: 54px;
+			font-weight: semibold;
+			cursor: pointer;
+		}
+		
+		.score {
+			font-weight: semibold;
+			position: absolute;
+			left: 926px;
+			top: 54px;
+		}
+		
+		.value {
+			position: absolute;
+			top: 54px;
+			left: 992px;
+		}
+		
+		
+		.hidden {
+			display: none;
+		}
+		
+		
+		/*стили для 3ей страницы*/
+		.finalLogo {
+			width: 516px;
+			height: 275px;
+			background-image: url(../images/Group2.png);
+			background-repeat: no-repeat;
+			position: absolute;
+			left: 382px;
+			top: 74px;
+
+		}
+		
+		.congratulations {
+			text-align: center;
+			font-size: 24px;
+			color: rgba(255, 255, 255, .85);
+			word-spacing: 0.15px;
+			line-height: 35px;
+			font-weight: bold;
+			width: 304px;
+			height: 70px;
+			position: absolute;
+			top: 358px;
+			left: 488.5px;
+		}
+		
+		.congratulations p, .congratulations span {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.btn2 {
+			padding-left: 30px;
+			padding-right: 30px;
+			left: 576px;
+			top: 468px;
+		}
+
+
+
+	
+	</style>
+</head>
+<body class="cloth">
+	<!--Контейнер, содержащий первоначальное содержимое-->
+	<div class="show" id="startPage">
+		<div class="logo"></div>
+	
+		<div class="title">memory game</div>
+		<input type="button" class="button btnPosition1" value="Начать игру" 
+			id="btnPlay">
+	</div>
+	<!--Контейнер, содержащий геймплей-->
+	<div class="hidden" id="gamePage">
+		<div class="again notes">Начать заново</div>
+		<div class="score notes">Очки:</div>
+		<div class="notes value">0</div>
+		<div class="table">
+			
+		</div>
+	</div>
+	<!--Контейнер, содержащий финальную заставку-->
+	<div class="hidden" id="finalPage">
+		<div class="finalLogo"></div>
+		<div class="congratulations">
+			<p>Поздравляем!</p>
+			<p id="finalScore">Ваш итоговый счет: 594</p>
+		</div>
+		<input type="button" value="Еще раз" class="button btn2">
+	</div>	
+		
+		
+	<script>
+	var btnPlay = document.getElementById('btnPlay');
+	var startPage = document.getElementById('startPage');
+	var gamePage = document.getElementById('gamePage');
+	
+
+	
+	btnPlay.onclick = function() {
+		this.style.zIndex = 0;
+		startPage.className ='hide hidden';
+
+		setTimeout(function() {
+			play();
+		}, 1000);
+
+	};
+	
+	var again = gamePage.getElementsByClassName('again')[0];
+	again.onclick = function() {
+		gamePage.className = 'hidden';
+		setTimeout(function() {
+			play();
+		}, 1000);	
+	};
+	
+	
+	function play() {
+		gamePage.className = 'show';
+		var table = gamePage.getElementsByClassName('table')[0];
+		table.innerHTML = '';
+		
+		/*Игра memory. На игровой стол выкладываются три ряда карт по 6
+		штук в каждом. Каждая уникальная карта содержит пару. Карты на 5 
+		секунд переворачиваются рубашкой вниз. 
+		Игрок запоминает расположение пар. А затем по очеред вспоминает 
+		отгадывает парные карты. За правильный ответ очки прибавляются.
+		За неправильный вычитаются.*/
+		
+		
+		//объект карта
+		var card = {};
+		/*Масти на английском:
+		diamonds - бубны;
+		hearts - червы;
+		spades - пики;
+		clubs - трефы.
+		A - Ace - туз
+		*/
+		
+		card.RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
+			'J', 'Q', 'K'];
+		
+		card.SUITS = ['D', 'H', 'S', 'C'];
+		
+
+		
+		
+		function populate() {
+			var cards = [];
+			for (var i = 0; i < card.RANKS.length; i++) {
+				for (var j = 0; j < card.SUITS.length; j++) {
+					cards.push(card.RANKS[i] + card.SUITS[j]);
+				} 
+			}
+			return cards;
+		}
+		
+		function randomCompare() {
+			return Math.floor(-1 + Math.random() * 3);
+		}
+		
+		
+		var cards = populate();
+		cards.sort(randomCompare);
+		var deck = [];
+		
+		for (var i = 0; i < 9; i++) {
+			deck.push(cards[i]);
+			deck.push(cards[i]);
+		}
+		
+		deck.sort(randomCompare);
+		
+		
+		function getFullUrl(imageName) {
+			return 'url(../Cards/' + imageName + '.png';
+		}
+		
+
+		for (var i = 0; i < 18; i++) {
+			var div = document.createElement('div');
+			div.className = 'card backSide';
+			div.dataset.card = deck[i];
+			table.appendChild(div);
+		}
+		var cardsOnTheTable = table.getElementsByClassName('card');
+		
+		setTimeout(function() {
+			[].forEach.call(cardsOnTheTable, function(div) {
+				div.classList.remove('backSide');
+				div.style.backgroundImage = getFullUrl(div.dataset.card);
+			});
+		}, 4000);
+		
+		setTimeout(function() {
+			[].forEach.call(cardsOnTheTable, function(div) {
+				div.style.backgroundImage = '';
+				div.classList.add('backSide');
+				div.onclick = flipTheCard;
+			});
+		}, 9000);//5 сек время для запоминания
+		
+		//Сделаем защиту от "дурака". Чтобы ничего лишнего не накликали
+		//разрешаем макимально переворачивать 2 карты
+		card.tracking = 0;
+		
+		//Параметр time в будуще позволит изменять опции. Он определяет 
+		//на сколько  быстро карта переворачивается рубашкой вниз и 
+		//обратно
+		card.time = 800;
+		 
+		//Переменная необходима, для сравнения двух карт.
+		card.firstSelectedCard = null;
+		
+		//переменная, в которой сохраняем число отгаданных пар
+		card.guessed = 0;
+		
+		//функции подсчета очков
+		function incScore() {
+			var value  = scoreValue.innerHTML;
+			value = Number(value) + (9 - card.guessed) * 42;
+			scoreValue.innerHTML = value;
+		}
+		function decScore() {
+			var value  = scoreValue.innerHTML;
+			value = Number(value) - card.guessed * 42;
+			if (value < 0) value = 0;
+			scoreValue.innerHTML = value;
+		}
+		
+		//Определим div-элемент для записи очков
+		var scoreValue = gamePage.getElementsByClassName('value')[0];
+		scoreValue.innerHTML = 0;
+		
+		
+
+		
+		
+		function flipTheCard(e) {
+			if (card.tracking >= 2) return;
+			card.tracking++;
+			var target = e.target;
+			var currentCard = target.dataset.card;
+			target.classList.remove('backSide');
+			target.style.backgroundImage = getFullUrl(currentCard);
+
+			if (!card.firstSelectedCard) {
+				card.firstSelectedCard = target;
+			} else {
+				
+				if (card.firstSelectedCard.dataset.card == currentCard) {
+					card.guessed++;
+					incScore();
+					setTimeout(function() {
+						card.firstSelectedCard.onclick = null;
+						target.onclick = null;
+						card.firstSelectedCard = null;
+						card.tracking -= 2;
+						//условие окончания игры
+						if (card.guessed == 9) {
+
+							var finalScore = 
+								document.getElementById('finalScore');
+							finalScore.innerHTML = "Ваш итоговый счет" + 
+								": " + scoreValue.innerHTML; 
+							showFinalScreen();
+							
+						}
+					}, card.time);
+				} else {
+					decScore();
+					setTimeout(function() {
+						card.firstSelectedCard.style.backgroundImage = '';
+						card.firstSelectedCard.classList.add('backSide');
+						target.style.backgroundImage = '';
+						target.classList.add('backSide');
+						card.firstSelectedCard = null;
+						card.tracking -= 2;
+					}, card.time);
+				}
+				
+			}
+		}
+	}
+	
+	function showFinalScreen() {
+		gamePage.className = 'hide hidden';
+		finalPage.className = 'show';
+		
+		var againBtn = finalPage.getElementsByClassName('button')[0];
+		againBtn.onclick = function() {			
+			finalPage.className = 'hide hidden';
+			play();
+		};
+		
+	}
+		
+
+	</script>
+	
+</body>
+</html>
